@@ -47,7 +47,7 @@ export const About = () => {
 
             <div className="col-md-6 mt-4 mt-md-0 text-center">
               <img
-                src="../assets/brands/about_logo.jpg"
+                src={process.env.PUBLIC_URL+"/assets/brands/about_logo.jpg"}
                 alt="Networking Equipment"
                 className="img-fluid rounded shadow"
                 style={{ maxWidth: '180px', height: 'auto' }}

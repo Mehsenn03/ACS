@@ -65,7 +65,7 @@ export function Home() {
                 >
                   <div className="category-icon">
                     <img
-                      src={`/assets/brands/${category.logo}`}
+                      src={process.env.PUBLIC_URL + `/assets/brands/${category.logo}`}
                       alt={category.name}
                       className="brand-logo"
                     />

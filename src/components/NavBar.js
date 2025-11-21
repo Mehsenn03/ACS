@@ -32,7 +32,7 @@ export const Navbar = function () {
 
         <Link to="/" className="navbar-brand d-flex align-items-center">
           <img
-            src="/assets/brands/logo.png"
+            src={process.env.PUBLIC_URL+"/assets/brands/logo.png"}
             alt="Logo"
             className="navbar-logo-img-large"
           />
