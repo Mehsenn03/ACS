@@ -1,18 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "../styles/NavBar.css";
-
+import { useAuth } from "../context/AuthContext";
 
 export const Navbar = function () {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const cart = useCart();
+  const menuRef = useRef(null); 
+  const auth = useAuth();
+
+
   const totalItems = cart.items.reduce((sum, i) => sum + i.quantity, 0);
 
   function toggleMenu() {
     setIsOpen(!isOpen);
+  }
+
+  function closeMenu() {
+    setIsOpen(false);
   }
 
   function handleSearch(event) {
@@ -20,19 +28,30 @@ export const Navbar = function () {
     if (!searchQuery.trim()) return;
     navigate("/search?q=" + encodeURIComponent(searchQuery));
     setSearchQuery("");
+    closeMenu();
   }
 
   function goToCart() {
     navigate("/cart");
+    closeMenu();
   }
+
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      if (isOpen && menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [isOpen]);
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
-      <div className="container-fluid">
-
-        <Link to="/" className="navbar-brand d-flex align-items-center">
+      <div className="container-fluid" ref={menuRef}>
+        <Link to="/" className="navbar-brand d-flex align-items-center" onClick={closeMenu}>
           <img
-            src={process.env.PUBLIC_URL+"/assets/brands/logo.png"}
+            src={process.env.PUBLIC_URL + "/assets/brands/logo.png"}
             alt="Logo"
             className="navbar-logo-img-large"
           />
@@ -47,22 +66,34 @@ export const Navbar = function () {
           <span className="navbar-toggler-icon" />
         </button>
 
-        <div className={"collapse navbar-collapse" + (isOpen ? " show" : "") }>
+        <div className={"collapse navbar-collapse" + (isOpen ? " show" : "")}>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link to="/" className="nav-link">Home</Link>
+              <Link to="/" className="nav-link" onClick={closeMenu}>Home</Link>
             </li>
             <li className="nav-item">
-              <Link to="/shop" className="nav-link">Shop</Link>
+              <Link to="/shop" className="nav-link" onClick={closeMenu}>Shop</Link>
             </li>
             <li className="nav-item">
-              <Link to="/about" className="nav-link">About</Link>
+              <Link to="/about" className="nav-link" onClick={closeMenu}>About</Link>
             </li>
             <li className="nav-item">
-              <Link to="/contact" className="nav-link">Contact</Link>
+              <Link to="/contact" className="nav-link" onClick={closeMenu}>Contact</Link>
             </li>
             <li className="nav-item ms-lg-4">
-              <Link to="/admin" className="nav-link fw-bold text-danger">Admin</Link>
+              <button 
+                className="nav-link fw-bold text-danger btn p-0 border-0 bg-transparent"
+                onClick={() => {
+                  closeMenu();
+                  if (auth.isAuthenticated) {
+                    navigate("/admin");
+                  } else {
+                    navigate("/login");
+                  }
+                }}
+              >
+                Admin
+              </button>
             </li>
           </ul>
 
@@ -73,7 +104,7 @@ export const Navbar = function () {
                 type="search"
                 placeholder="Search products..."
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button
                 className="btn text-white fw-bold"

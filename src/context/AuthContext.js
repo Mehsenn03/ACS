@@ -1,16 +1,12 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = function ({ children }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
     const saved = localStorage.getItem("adminLoggedIn");
-    if (saved === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
+    return saved === "true";
+  });
 
   function login(username, password) {
     if (username === "admin" && password === "1234") {
