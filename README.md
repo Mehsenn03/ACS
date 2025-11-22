@@ -74,7 +74,7 @@ The website includes 7 pages (Home, Shop, Product Details, About, Contact, Cart,
 ## UI
 
 ### Home Page
-<img src="./screenshots/home1.png" width="800" />
+<img src="./screenshots/home.png" width="800" />
 <img src="./screenshots/home2.png" width="800" />
 <img src="./screenshots/home3.png" width="800" />
 <img src="./screenshots/home4.png" width="800" />
