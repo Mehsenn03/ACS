@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+body {
+  background: #ffffff;
+  color: #222;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+
+.transition-smooth {
+  transition: all 0.25s ease;
+}
+
+
+.container-custom {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+
+.card-hover {
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.card-hover:hover {
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+}
+
+
+.btn-base {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+
+.btn-orange {
+  background-color: #de6610 !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.btn-orange:hover {
+  background-color: #c75004 !important;
+}
+
+.btn-outline-orange {
+  background: transparent;
+  color: #de6610 !important;
+  border: 2px solid #de6610 !important;
+}
+
+.btn-outline-orange:hover {
+  background-color: #de6610 !important;
+  color: #fff !important;
+}
+
+
+.input-custom {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  transition: 0.25s ease;
+}
+
+.input-custom:focus {
+  outline: none;
+  border-color: #de6610;
+  box-shadow: 0 0 0 3px rgba(222,102,16,0.25);
+}
+
+
+.text-gradient-primary {
+  background: linear-gradient(to right, #fd7e14, #ff9800);
+  -webkit-text-fill-color: transparent;
+}
+
+
+.shadow-custom-sm { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+.shadow-custom-md { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.shadow-custom-lg { box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+.shadow-custom-xl { box-shadow: 0 20px 25px rgba(0,0,0,0.1); }
+
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #de6610;
+}
+
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadein {
+  animation: fadein 0.20s ease-out;
+}

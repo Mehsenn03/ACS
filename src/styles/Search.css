@@ -1,0 +1,84 @@
+.search-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.search-results-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.search-card {
+  width: 100%;
+  max-width: 280px; 
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  transition: 0.2s ease;
+}
+
+.search-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.search-card img {
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.search-card-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0.75rem 0 0.5rem 0;
+}
+
+.search-card-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+.search-card-badges {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.badge-new {
+  background: #007bff;
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+
+.badge-bestseller {
+  background: #28a745;
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
+
+.badge-featured {
+  background: #b45bff;
+  color: white;
+  padding: 3px 8px;
+  font-size: 0.75rem;
+  border-radius: 6px;
+}
