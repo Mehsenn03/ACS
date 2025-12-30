@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: acs-backend
+    env: node
+    repo: https://github.com/Mehsenn03/ACS
+    rootDir: server
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: PORT
+        value: 10000
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
