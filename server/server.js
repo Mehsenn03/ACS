@@ -23,7 +23,8 @@ const PORT = process.env.PORT || 10000;
 
 const allowedOrigins = [
   'http://localhost:3000', 
-  'https://mehsenn03.github.io/ACS' 
+  'https://mehsenn03.github.io/ACS',
+  'https://acs-frontend-ghnl.onrender.com'
 ];
 
 app.use(cors({
@@ -51,3 +52,4 @@ app.listen(PORT, () => {
   console.log(`Allowed CORS origins: ${allowedOrigins.join(', ')}`);
 
 });
+
