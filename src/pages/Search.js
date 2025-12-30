@@ -1,13 +1,39 @@
+import { useState, useEffect } from "react"; 
 import { useSearchParams, Link } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
-import { searchProducts } from "../data/products";
+import { useProducts } from "../context/ProductContext";
 import "../styles/Search.css";
 
 
 export const Search = function () {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
-  const results = query ? searchProducts(query) : [];
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { searchProducts } = useProducts();
+
+  useEffect(() => {
+    const performSearch = async () => {
+      if (!query) {
+        setResults([]);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        setError(null);
+        const searchResults = await searchProducts(query);
+        setResults(searchResults);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    performSearch();
+  }, [query, searchProducts]);
 
   return (
     <div className="search">
@@ -49,6 +75,21 @@ export const Search = function () {
                 Back to Home
               </Link>
             </div>
+          ) : loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-3">Searching products...</p>
+            </div>
+          ) : error ? (
+            <div className="alert alert-danger text-center">
+              <h3>Error Searching Products</h3>
+              <p>{error}</p>
+              <button className="btn btn-primary" onClick={() => window.location.reload()}>
+                Try Again
+              </button>
+            </div>
           ) : results.length > 0 ? (
             <>
               <div className="search-results-header mb-3">
@@ -58,7 +99,7 @@ export const Search = function () {
               </div>
               <div className="search-grid row g-4">
                 {results.map((product) => (
-                  <div key={product.id} className="col-12 col-sm-6 col-lg-4">
+                  <div key={product.pid} className="col-12 col-sm-6 col-lg-4">
                     <ProductCard product={product} />
                   </div>
                 ))}
