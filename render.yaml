@@ -15,3 +15,12 @@ services:
         sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
+  - type: static
+    name: acs-frontend
+    buildCommand: npm install && npm install @supabase/supabase-js && npm run build
+    publishDirectory: build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://acs-uwa5.onrender.com  
+      - key: CI
+        value: false
