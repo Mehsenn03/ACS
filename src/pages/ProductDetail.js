@@ -1,33 +1,48 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "sonner";
-import { getProductById, getProductsByCategory } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
 import "../styles/ProductDetail.css";
 import { useCart } from "../context/CartContext";
+import { useProducts } from "../context/ProductContext";
 
 export const ProductDetail = function () {
   const cart = useCart();
   const params = useParams();
   const productId = params.productId;
+  const { getProductById, getProductsByCategory, loading, error } = useProducts();
+  
   const product = getProductById(productId);
   const [quantity, setQuantity] = useState(1);
 
-  if (!product) {
+  const relatedProducts = product 
+    ? getProductsByCategory(product.category)
+        .filter((p) => p.pid !== product.pid)
+        .slice(0, 3)
+    : [];
+
+  if (loading) {
+    return (
+      <div className="container py-5 text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading product details...</p>
+      </div>
+    );
+  }
+
+  if (error || !product) {
     return (
       <div className="container py-5">
         <div className="alert alert-danger text-center">
           <h1>Product Not Found</h1>
-          <p>The product you're looking for doesn't exist.</p>
+          <p>{error || "The product you're looking for doesn't exist."}</p>
           <Link to="/" className="btn btn-primary mt-3">Back to Home</Link>
         </div>
       </div>
     );
   }
-
-  const relatedProducts = getProductsByCategory(product.category)
-    .filter((p) => p.id !== product.id)
-    .slice(0, 3);
 
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-US", {
@@ -81,7 +96,7 @@ export const ProductDetail = function () {
         <div className="col-md-6">
           <h1 className="h3 mb-3">{product.name}</h1>
           <div className="mb-2">
-            <span className="text-muted small me-3">Product ID: {product.id}</span>
+            <span className="text-muted small me-3">Product ID: {product.pid}</span>
             <span className={
               "badge " + (isInStock ? "bg-success" : "bg-danger")
             }>
@@ -182,7 +197,7 @@ export const ProductDetail = function () {
           <h2 className="h5 mb-4">Related Products</h2>
           <div className="row">
             {relatedProducts.map((relatedProduct) => (
-              <div className="col-md-4 mb-3" key={relatedProduct.id}>
+              <div className="col-md-4 mb-3" key={relatedProduct.pid}>
                 <ProductCard product={relatedProduct} />
               </div>
             ))}
