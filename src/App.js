@@ -21,7 +21,7 @@ import "./App.css";
 
 function App() {
   return (
-    <BrowserRouter basename="/ACS">
+    <BrowserRouter>
       <AuthProvider>
         <ProductProvider>
           <CartProvider>
