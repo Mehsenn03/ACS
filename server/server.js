@@ -35,6 +35,10 @@ app.use(cors({
 
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('ACS Backend is running!');
+});
+
 app.use('/api/auth', createAuthRouter(supabase));
 app.use('/api/products', createProductsRouter(supabase));
 
@@ -45,4 +49,5 @@ app.get('/health', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
   console.log(`Allowed CORS origins: ${allowedOrigins.join(', ')}`);
+
 });
