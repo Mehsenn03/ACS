@@ -2,7 +2,6 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Mehsenn03.github.io/ACS",
   "dependencies": {
     "bootstrap": "^5.3.8",
     "react": "^19.0.0",
@@ -14,9 +13,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build -r https://Mehsenn03:${GH_TOKEN}@github.com/Mehsenn03/ACS.git"
+    "test": "react-scripts test"
   },
   "browserslist": {
     "production": [
@@ -29,8 +26,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
   }
 }
