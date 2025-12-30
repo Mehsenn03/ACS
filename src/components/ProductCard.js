@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import "../styles/ProductCard.css";
 
-
 export const ProductCard = function ({ product }) {
   const formatPrice = (price) =>
     new Intl.NumberFormat("en-US", {
@@ -12,7 +11,7 @@ export const ProductCard = function ({ product }) {
   const isInStock = product.availability === "In Stock" && product.stock > 0;
 
   return (
-    <Link to={"/product/" + product.id} className="product-card text-decoration-none">
+    <Link to={"/product/" + product.pid} className="product-card text-decoration-none">
       <div className="product-card-image-wrapper position-relative">
         <img
           src={product.image}
