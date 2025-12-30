@@ -62,18 +62,37 @@ export const AuthProvider = function ({ children }) {
         };
       }
       
-      const origin = `${window.location.origin}/ACS`;
+      // Dynamic redirect URL for production vs development
+      const getRedirectUrl = () => {
+        // Use environment variable if set
+        if (process.env.REACT_APP_REDIRECT_URL) {
+          return process.env.REACT_APP_REDIRECT_URL;
+        }
+        
+        // For production (Render deployment)
+        if (window.location.hostname.includes('render.com') || 
+            process.env.NODE_ENV === 'production') {
+          return 'https://acs-frontend-ghnl.onrender.com/auth/callback';
+        }
+        
+        // For local development
+        return `${window.location.origin}/auth/callback`;
+      };
+      
+      const redirectUrl = getRedirectUrl();
+      console.log('Using redirect URL:', redirectUrl); // Debug log
       
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${origin}/auth/callback`,
+          emailRedirectTo: redirectUrl,
         }
       });
       
       if (error) throw error;
       return { success: true, message: "Check your email for the login link" };
     } catch (error) {
+      console.error('Login error:', error);
       return { success: false, message: error.message };
     }
   };
