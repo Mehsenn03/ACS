@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build -r https://Mehsenn03:${GH_TOKEN}@github.com/Mehsenn03/ACS.git"
   },
   "browserslist": {
     "production": [
