@@ -1,23 +1,27 @@
 import { useState, useMemo } from "react";
-import { products, categories } from "../data/products";
 import { ProductCard } from "../components/ProductCard";
 import { useLocation } from "react-router-dom";
-
+import { useProducts } from "../context/ProductContext";
 
 export const Shop = () => {
-
   const location = useLocation();
   const preselectedBrand = location.state?.brand || "all";
-  const subcategories = Array.from(new Set(products.map(p => p.subcategory))).filter(Boolean);
-
-  const brands = categories.map(cat => cat.id);
-
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  const [selectedBrand, setSelectedBrand] = useState(preselectedBrand);
-
-  const [sortBy, setSortBy] = useState("name");
   
+  const { products, loading, error } = useProducts();
+  
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedBrand, setSelectedBrand] = useState(preselectedBrand);
+  const [sortBy, setSortBy] = useState("name");
+
+  const subcategories = useMemo(() => {
+    return Array.from(new Set(products.map(p => p.subcategory))).filter(Boolean);
+  }, [products]);
+
+  const brands = useMemo(() => {
+    const uniqueCategories = [...new Set(products.map(p => p.category))];
+    return uniqueCategories.map(cat => ({ id: cat, name: cat }));
+  }, [products]);
+
   const filteredProducts = useMemo(() => {
     let list = [...products];
 
@@ -36,7 +40,32 @@ export const Shop = () => {
     });
 
     return list;
-  }, [selectedCategory, selectedBrand, sortBy]);
+  }, [products, selectedCategory, selectedBrand, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="container py-5 text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading products...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-5">
+        <div className="alert alert-danger">
+          <h3>Error Loading Products</h3>
+          <p>{error}</p>
+          <button className="btn btn-primary" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -66,7 +95,6 @@ export const Shop = () => {
                 </select>
               </div>
 
-
               <div className="mb-4">
                 <h5 className="fw-bold mb-3">Brand</h5>
                 <select
@@ -76,7 +104,7 @@ export const Shop = () => {
                 >
                   <option value="all">All</option>
                   {brands.map(brand => (
-                    <option key={brand} value={brand}>{brand}</option>
+                    <option key={brand.id} value={brand.id}>{brand.name}</option>
                   ))}
                 </select>
               </div>
@@ -110,7 +138,7 @@ export const Shop = () => {
               {filteredProducts.length > 0 ? (
                 <div className="row g-4">
                   {filteredProducts.map(p => (
-                    <div key={p.id} className="col-6 col-md-4 col-lg-3">
+                    <div key={p.pid} className="col-6 col-md-4 col-lg-3">
                       <ProductCard product={p} />
                     </div>
                   ))}
