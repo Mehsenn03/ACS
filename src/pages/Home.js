@@ -1,17 +1,42 @@
 import { Link } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
-import {
-  getFeaturedProducts,
-  getNewArrivals,
-  getBestSellers,
-  categories,
-} from "../data/products";
+import { useProducts } from "../context/ProductContext";
+import { categories } from "../data/products";
 import "../styles/Home.css";
 
 export function Home() {
-  const featuredProducts = getFeaturedProducts();
-  const newArrivals = getNewArrivals();
-  const bestSellers = getBestSellers();
+  const { products, loading, error } = useProducts();
+  
+  const featuredProducts = products.filter(product => product.featured);
+  
+  const newArrivals = products.filter(product => product.newarrival);
+  
+  const bestSellers = products.filter(product => product.bestseller);
+
+  if (loading) {
+    return (
+      <div className="container py-5 text-center">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading products...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-5">
+        <div className="alert alert-danger">
+          <h3>Error Loading Products</h3>
+          <p>{error}</p>
+          <button className="btn btn-primary" onClick={() => window.location.reload()}>
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home">
@@ -46,7 +71,6 @@ export function Home() {
         </div>
       </section>
 
-      {/* Categories Section – Shop by Brand */}
       <section className="section">
         <div className="section-container">
           <div className="section-header">
@@ -89,9 +113,13 @@ export function Home() {
             </p>
           </div>
           <div className="products-grid">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {featuredProducts.length > 0 ? (
+              featuredProducts.map((product) => (
+                <ProductCard key={product.pid} product={product} />
+              ))
+            ) : (
+              <p>No featured products available at the moment.</p>
+            )}
           </div>
         </div>
       </section>
@@ -102,7 +130,7 @@ export function Home() {
             <div className="home-split-section">
               <div className="section-header-small">
                 <h3 className="section-title-small">New Arrivals</h3>
-                <Link to="/category/tplink" className="section-link">
+                <Link to="/shop" className="section-link">
                   View All
                   <svg className="section-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -110,30 +138,34 @@ export function Home() {
                 </Link>
               </div>
               <div className="home-products-list">
-                {newArrivals.slice(0, 4).map((product) => (
-                  <Link
-                    key={product.id}
-                    to={`/product/${product.id}`}
-                    className="home-product-item"
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="home-product-image"
-                    />
-                    <div className="home-product-info">
-                      <h4 className="home-product-name">{product.name}</h4>
-                      <p className="home-product-price">${product.price}</p>
-                    </div>
-                  </Link>
-                ))}
+                {newArrivals.length > 0 ? (
+                  newArrivals.slice(0, 4).map((product) => (
+                    <Link
+                      key={product.pid}
+                      to={`/product/${product.pid}`}
+                      className="home-product-item"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="home-product-image"
+                      />
+                      <div className="home-product-info">
+                        <h4 className="home-product-name">{product.name}</h4>
+                        <p className="home-product-price">${product.price}</p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p>No new arrivals available at the moment.</p>
+                )}
               </div>
             </div>
 
             <div className="home-split-section">
               <div className="section-header-small">
                 <h3 className="section-title-small">Best Sellers</h3>
-                <Link to="/category/ubiquiti" className="section-link">
+                <Link to="/shop" className="section-link">
                   View All
                   <svg className="section-link-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -141,23 +173,27 @@ export function Home() {
                 </Link>
               </div>
               <div className="home-products-list">
-                {bestSellers.slice(0, 4).map((product) => (
-                  <Link
-                    key={product.id}
-                    to={`/product/${product.id}`}
-                    className="home-product-item"
-                  >
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="home-product-image"
-                    />
-                    <div className="home-product-info">
-                      <h4 className="home-product-name">{product.name}</h4>
-                      <p className="home-product-price">${product.price}</p>
-                    </div>
-                  </Link>
-                ))}
+                {bestSellers.length > 0 ? (
+                  bestSellers.slice(0, 4).map((product) => (
+                    <Link
+                      key={product.pid}
+                      to={`/product/${product.pid}`}
+                      className="home-product-item"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="home-product-image"
+                      />
+                      <div className="home-product-info">
+                        <h4 className="home-product-name">{product.name}</h4>
+                        <p className="home-product-price">${product.price}</p>
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <p>No best sellers available at the moment.</p>
+                )}
               </div>
             </div>
           </div>
